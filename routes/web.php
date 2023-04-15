@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bacend\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/user', [UserController::class, "index"]);
+
+Route::resource('/users', UserController::class);
