@@ -19,15 +19,14 @@
     <link rel="manifest" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/manifest.json">
     <link rel="mask-icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
     <link rel="icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/favicon.ico">
-    
+
     <link rel="stylesheet" href="{{asset('build/assets/app.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 
     <meta name="theme-color" content="#712cf9">
-    
-    <link href="{{asset('build/assets/dashboard.css')}}" rel="stylesheet">
 
+    <link href="{{asset('build/assets/dashboard.css')}}" rel="stylesheet">
 
 </head>
 
@@ -85,65 +84,77 @@
                     </div>
                 </div>
 
-                <h2> Kullanıcılar </h2>
-                <div class="table-responsive">
-                    <table class="table table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Sıra No</th>
-                                <th scope="col">Ad Soyad</th>
-                                <th scope="col">Eposta</th>
-                                <th scope="col">Durum</th>
-                                <th scope="col">İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(count($users) > 0)
-                                @foreach($users as $user)
-                                    <tr style="line-height: 50px;">
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$user->name}}</td>
-                                        <td>{{$user->email}}</td>
-                                        <td>{{$user->is_active}}</td>
-                                        <td style="line-height: 35px;">
-                                            <ul class="nav float-start">
-                                                <li class="nav-item">
-                                                    <a class="nav-link" style="color:#26B99A;" href='{{url("/users/$user->user_id/edit")}}'>
-                                                        <span class="fa fa-edit"></span> Güncelle
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link list-item-delete" style="color:#D9534F" href='{{url("/users/$user->user_id")}}'>
-                                                        <span class="fa fa-edit"></span> Sil
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" style="color:#337AB7" href="/users">
-                                                        <span class="fa fa-edit"></span> Şifre Değiştir
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="5" align="center"> Herhangi Bir Değer Bulunamadı!! </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                <h2> Yeni Kullanıcı Ekle </h2>
+                <div>
+                    <form action="" method="POST" class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-3">
+                            <label for="name" class="form-label">Ad - Soyad</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Ad soyad giriniz.." required>
+                            <div class="invalid-feedback">
+                                Lütfen Adınızı Giriniz!
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="mail" class="form-label">Mail</label>
+                            <input type="email" class="form-control" id="mail" name="mail" placeholder="Mail adersi giriniz.." required>
+                            <div class="invalid-feedback">
+                                Lütfen Mail Adresinizi Giriniz!
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="password" class="form-label">Şifre</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Şifre giriniz.." required>
+                            <div class="invalid-feedback">
+                                Lütfen Şifrenizi Giriniz!
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3 custom-control">
+                            <label for="is_active" class="form-label">Aktif - Pasif</label>
+                            <select class="form-select" required aria-label="select example" name="is_active">
+                                <option value="1">Aktif</option>
+                                <option value="0">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 custom-control custom-checkbox" style="font-size: large; line-height: 75px;">
+                            <input type="checkbox" class="custom-control-input" id="is_admin" name="is_admin">
+                            <label class="custom-control-label" for="is_admin">Yetkili Kullanıcı</label>
+                        </div>                       
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit" name="kaydet">Kaydet</button>
+                        </div>
+                    </form>
+
                 </div>
             </main>
         </div>
     </div>
 
 
-    <script type="text/javascript" src="{{asset('build/assets/app.js')}}" ></script>
-    
+    <script type="text/javascript" src="{{asset('build/assets/app.js')}}"></script>
+    <script>
+        (function() {
+            'use strict'
 
-    
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 
 
 </body>
+
 </html
