@@ -68,47 +68,53 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2"> Yönetim Paneli </h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a href="/users/create">
+                                <button type="button" class="btn btn-sm btn-outline-danger">Yeni Ekle</button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                <h2> Yeni Kullanıcı Ekle </h2>
+                <h2> Kullanıcı Düzenle </h2>
                 <div>
-                    <form action='{{url("/users")}}' method="POST" class="row g-3 needs-validation" novalidate>
+                    <form action='{{url("/users/$user->user_id")}}' method="POST" class="row g-3 needs-validation" novalidate>
                         @csrf
+                        @method("PUT")
                         <div class="col-md-3">
                             <label for="name" class="form-label">Ad - Soyad</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Ad soyad giriniz.." required>
+                            <input type="text" class="form-control" id="name" name="name" value="{{$user->name}}" required>
                             <div class="invalid-feedback">
                                 Lütfen Adınızı Giriniz!
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="email" class="form-label">Mail</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Mail adersi giriniz.." required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{$user->email}}" required>
                             <div class="invalid-feedback">
                                 Lütfen Mail Adresinizi Giriniz!
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="password" class="form-label">Şifre</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Şifre giriniz.." required>
-                            <div class="invalid-feedback">
-                                Lütfen Şifrenizi Giriniz!
-                            </div>
-                        </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-md-6"></div> <!-- şife alanını tekrar aktif ettiğinde burayı da düzelt -->
                         <div class="col-md-3 custom-control">
                             <label for="is_active" class="form-label">Aktif - Pasif</label>
                             <select class="form-select" required aria-label="select example" name="is_active" id="is_active">
-                                <option value="1">Aktif</option>
-                                <option value="0">Pasif</option>
+                                @if($user->is_active == 1)
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Pasif</option>
+                                @else
+                                    <option value="0">Pasif</option>
+                                    <option value="1">Aktif</option>
+                                @endif
                             </select>
                         </div>
                         <div class="col-md-4 custom-control custom-checkbox" style="font-size: large; line-height: 75px;">
-                            <input type="checkbox" class="custom-control-input" id="is_admin" name="is_admin" value="1">
+                            <input type="checkbox" class="custom-control-input" id="is_admin" name="is_admin" value="1" {{$user->is_admin == 1 ? "checked" : ""}}>
                             <label class="custom-control-label" for="is_admin">Yetkili Kullanıcı</label>
                         </div>                       
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Kaydet</button>
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
                         </div>
                     </form>
 

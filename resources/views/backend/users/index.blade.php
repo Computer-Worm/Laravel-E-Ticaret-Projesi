@@ -93,18 +93,32 @@
                                 <th scope="col">Sıra No</th>
                                 <th scope="col">Ad Soyad</th>
                                 <th scope="col">Eposta</th>
-                                <th scope="col">Durum</th>
+                                <th scope="col">Aktiflik</th>
+                                <th scope="col">Yetki</th>
                                 <th scope="col">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(count($users) > 0)
                                 @foreach($users as $user)
-                                    <tr style="line-height: 50px;">
+                                    <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
-                                        <td>{{$user->is_active}}</td>
+                                        <td>
+                                            @if($user->is_active == "1")
+                                                <p style="color:#F68226">Aktif</p>
+                                            @else
+                                                <p style="color:#7E6AB0">Pasif</p>
+                                            @endif
+                                        </td>
+                                        <td>   
+                                            @if($user->is_admin == "1")
+                                                <p style="color:#F68226">Admin</p>
+                                            @else
+                                                <p style="color:#7E6AB0">Kullanıcı</p>
+                                            @endif
+                                        </td>
                                         <td style="line-height: 35px;">
                                             <ul class="nav float-start">
                                                 <li class="nav-item">
@@ -114,7 +128,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link list-item-delete" style="color:#D9534F" href='{{url("/users/$user->user_id")}}'>
-                                                        <span class="fa fa-edit"></span> Sil
+                                                        <span class="fa fa-trash"></span> Sil
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">

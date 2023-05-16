@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bacend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -30,7 +31,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return "store";
+        $name      = $request->get("name");
+        $email     = $request->get("email");
+        $password  = $request->get("password");
+        $is_active = $request->get("is_active");
+        $is_admin  = $request->get("is_admin", default:0);
+
+        $user = new User();
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = $password;
+        $user->is_active = $is_active;
+        $user->is_admin = $is_admin;
+
+        $user->save();
+
+        return Redirect::to("/users");
     }
 
     /**
@@ -46,7 +62,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        return "edit";
+        $user = User::find($id);
+        return view("backend.users.update_form", ["user" => $user]);
     }
 
     /**
@@ -54,7 +71,20 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return "update";
+        $name = $request->get("name");
+        $email = $request->get("email");
+        $is_active = $request->get("is_active");
+        $is_admin = $request->get("is_active");
+        
+        $user = User::find($id);
+
+        $user->name = $name;
+        $user->email = $email;
+        $user->$is_active = $is_active;
+        $user->$is_admin = $is_admin;
+
+        $user->save();
+        return Redirect::to("/users"); //haat var burda kaldık!!
     }
 
     /**
